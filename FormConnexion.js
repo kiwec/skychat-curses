@@ -34,7 +34,7 @@ class FormConnexion {
 		});
 
 		this.form.on('submit', (data) => {
-			this.form.destroy();
+			this._showLoading();
 			this.screen.render();
 			this.callback(data);
 		});
@@ -98,6 +98,9 @@ class FormConnexion {
 			left: 5,
 			content: 'Mot de passe : '
 		});
+
+		this.username.key('enter', () => this.form.submit());
+		this.password.key('enter', () => this.form.submit());
 	}
 
 	/**
@@ -107,7 +110,6 @@ class FormConnexion {
 		this.btnConnexion = blessed.button({
 			parent: this.form,
 			mouse: true,
-			keys: true,
 			shrink: true,
 			padding: {
 				left: 1,
@@ -131,6 +133,37 @@ class FormConnexion {
 		this.btnConnexion.on('press', () => {
 			this.form.submit();
 		});
+	}
+
+	/**
+	 * Détruit les éléments du formulaire et affiche un message de chargement
+	 */
+	_showLoading() {
+		this.username.destroy();
+		this.txtUsername.destroy();
+		this.password.destroy();
+		this.txtPassword.destroy();
+		this.btnConnexion.destroy();
+
+		this.txtConnexion = blessed.loading({
+			parent: this.form,
+			height: 'shrink',
+			width: 1,
+			top: 'center',
+			left: 'center'
+		});
+
+		this.txtConnexion.load('');
+	}
+
+	/**
+	 * Détruit l'écran de connexion
+	 */
+	destroy() {
+		this.txtConnexion.stop();
+		this.txtConnexion.destroy();
+		this.form.destroy();
+		this.screen.render();
 	}
 };
 
