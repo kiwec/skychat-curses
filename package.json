@@ -1,0 +1,17 @@
+{
+  "name": "skychat-curses",
+  "version": "1.0.0",
+  "description": "Interface curses pour chat skychat",
+  "main": "index.js",
+  "keywords": [
+    "curses",
+    "skychat",
+    "node-skychat"
+  ],
+  "author": "kiwec",
+  "license": "MIT",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "node-skychat": "github:kiwec/node-skychat"
+  }
+}
