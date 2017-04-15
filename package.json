@@ -1,0 +1,17 @@
+{
+  "name": "redsky-curses",
+  "version": "1.0.0",
+  "description": "Interface curses pour chat redsky",
+  "main": "index.js",
+  "keywords": [
+    "curses",
+    "redsky",
+    "node-redsky"
+  ],
+  "author": "kiwec",
+  "license": "MIT",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "node-redsky": "github:kiwec/node-redsky"
+  }
+}
