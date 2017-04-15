@@ -15,7 +15,7 @@ screen.key(['escape', 'q', 'C-c'], (ch, key) => {
 });
 
 // Création et affichage du formulaire de connexion
-new FormConnexion(screen, init_skychat);
+let connexion = new FormConnexion(screen, init_skychat);
 screen.render();
 
 // Events du skychat
@@ -31,5 +31,8 @@ function init_skychat(config) {
 			console.log('Erreur de connection : ' + log.error);
 			process.exit(1);
 		}
+
+		connexion.destroy();
+		// TODO
 	});
 }
