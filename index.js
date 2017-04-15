@@ -1,15 +1,35 @@
 const blessed = require('blessed');
-const SkyChat = require('node-skychat').init(require('./Config'));
+const FormConnexion = require('./FormConnexion');
+const SkyChat = require('node-skychat');
 
-SkyChat.on('log', () => {
-	let screen = blessed.screen({
-		smartCSR: true
-	});
-
-	screen.title = 'test';
-	screen.key(['escape', 'q', 'C-c'], (ch, key) => {
-		return process.exit(0);
-	});
-
-	screen.render();
+// Initialisation du screen
+let screen = blessed.screen({
+	autoPadding: true,
+	smartCSR: true,
+	title: 'skychat-curses'
 });
+
+// Touches de sortie
+screen.key(['escape', 'q', 'C-c'], (ch, key) => {
+	return process.exit(0);
+});
+
+// Création et affichage du formulaire de connexion
+new FormConnexion(screen, init_skychat);
+screen.render();
+
+// Events du skychat
+function init_skychat(config) {
+	SkyChat.init({
+		username: config.username,
+		password: config.password
+	});
+
+	SkyChat.on('log_once', (log) => {
+		if(log.error) {
+			screen.destroy();
+			console.log('Erreur de connection : ' + log.error);
+			process.exit(1);
+		}
+	});
+}
