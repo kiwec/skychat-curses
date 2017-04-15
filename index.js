@@ -1,4 +1,5 @@
 const blessed = require('blessed');
+const ChatWindow = require('./ChatWindow');
 const FormConnexion = require('./FormConnexion');
 const SkyChat = require('node-redsky');
 
@@ -6,6 +7,7 @@ const SkyChat = require('node-redsky');
 let screen = blessed.screen({
 	autoPadding: true,
 	smartCSR: true,
+	fullUnicode: true,
 	title: 'redsky-curses'
 });
 
@@ -33,6 +35,8 @@ function init_skychat(config) {
 		}
 
 		connexion.destroy();
-		// TODO
+		let chat = new ChatWindow(screen, SkyChat);
+		SkyChat.on('message', (msg) => chat.printMessage(msg));
+		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 	});
 }
