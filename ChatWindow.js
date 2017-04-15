@@ -58,8 +58,17 @@ class ChatWindow {
 		this.zoneTexte.key('enter', () => {
 			this.skyChat.send(this.zoneTexte.value);
 			this.zoneTexte.clearValue();
+			this.screen.render();
 		});
 
+		this.screen.render();
+	}
+
+	/**
+	 * Ajoute le texte à la liste de messages
+	 */
+	print(txt) {
+		this.chat.log(txt);
 		this.screen.render();
 	}
 
@@ -68,9 +77,8 @@ class ChatWindow {
 	 */
 	printMessage(msg) {
 		let txt = this.skyChat.messageHandler.clean(msg.message);
-		this.chat.log('{' + msg.color + '-fg}' + msg.pseudo + '{/}: '
+		this.print('{' + msg.color + '-fg}' + msg.pseudo + '{/}: '
 			+ blessed.escape(txt));
-		this.screen.render();
 	}
 
 	/**
