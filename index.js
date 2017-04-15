@@ -40,6 +40,7 @@ function init_skychat(config) {
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 		SkyChat.on('room_name', (name) => {
 			chat.updateTitle(name);
-		})
+		});
+		SkyChat.on('connected_list', (list) => chat.updateUserList(list));
 	});
 }
