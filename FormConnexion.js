@@ -55,9 +55,6 @@ class FormConnexion {
 			name: 'username',
 			style: {
 				bg: 'gray',
-				focus: {
-					bg: 'lightgray'
-				},
 				hover: {
 					bg: 'lightgray'
 				}
@@ -83,9 +80,6 @@ class FormConnexion {
 			name: 'password',
 			style: {
 				bg: 'gray',
-				focus: {
-					bg: 'lightgray'
-				},
 				hover: {
 					bg: 'lightgray'
 				}
