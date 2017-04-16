@@ -41,6 +41,7 @@ class YtPlayer {
 	playNext() {
 		clearTimeout(this.to);
 		if(typeof this.video !== 'undefined') this.video.destroy();
+		if(this.liste.length == 0) return;
 
 		let vid = this.liste.shift();
 
