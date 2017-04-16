@@ -67,10 +67,14 @@ class ChatWindow {
 			right: 0,
 			top: 0,
 			bottom: 1,
-			tags: true,
-			visible: this.screen.width > 90
+			tags: true
 		});
 
+		if(this.screen.width <= 90) {
+			this.userList.hide();
+		}
+
+		this.zoneTexte.focus();
 		this.screen.render();
 
 		this.screen.on('resize', () => {
