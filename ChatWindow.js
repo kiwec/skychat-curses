@@ -65,6 +65,13 @@ class ChatWindow {
 
 		this.zoneTexte.key('enter', () => {
 			this.skyChat.send(this.zoneTexte.value);
+			this.skyChat.sock.emit('typing', { currently_typing: true });
+			setTimeout(() => {
+				this.skyChat.sock.emit(
+					'typing',
+					{ currently_typing: false }
+				);
+			}, 200)
 			this.zoneTexte.clearValue();
 			this.zoneTexte.focus();
 			this.screen.render();
