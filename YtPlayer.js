@@ -16,19 +16,6 @@ class YtPlayer {
 		this.chat = chat;
 		this.liste = [];
 		this.to = -1;
-
-		this._initPlayer();
-	}
-
-	_initPlayer() {
-		this.video = blessed.video({
-			parent: this.screen,
-			top: 0,
-			left: 0,
-			width: this.chat.getWidth() - 1,
-			height: '50%',
-			hidden: true,
-		});
 	}
 	
 	addYt(yt_id, yt_length) {
@@ -57,14 +44,21 @@ class YtPlayer {
 
 	playNext() {
 		clearTimeout(this.to);
-		if(this.liste.length == 0) {
-			this.video.hide();
-			return;
-		}
+		if(typeof this.video !== 'undefined') this.video.destroy();
 
 		let vid = this.liste.shift();
-		this.video.file = vid.url;
-		this.video.show();
+
+		this.video = blessed.video({
+			parent: this.screen,
+			top: 0,
+			left: 0,
+			width: this.chat.getWidth() - 1,
+			height: '50%',
+			file: vid.url
+		});
+
+		this.screen.render();
+
 		this.to = setTimeout(() => this.playNext(), vid.video_length * 1000);
 	}
 
