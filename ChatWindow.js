@@ -123,7 +123,12 @@ class ChatWindow {
 	 */
 	updateUserList(connected_list) {
 		this.userList.clearItems();
-		for(let user of connected_list.list) {
+		
+		let users = connected_list.list.sort((a, b) => {
+			return a.last_activity - b.last_activity;
+		});
+
+		for(let user of users) {
 			this.userList.addItem('{' + user.color + '-fg}'
 				+ user.pseudo + '{/}');
 		}
