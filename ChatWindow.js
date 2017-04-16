@@ -121,6 +121,8 @@ class ChatWindow {
 	updateTitle(newTitle) {
 		this.screen.title = newTitle;
 	}
+
+	getWidth() { return this.chat.width; }
 }
 
 module.exports = ChatWindow;
