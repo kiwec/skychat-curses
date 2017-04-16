@@ -1,15 +1,6 @@
 const blessed = require('blessed');
 const exec = require('child_process').exec;
 
-
-/**
- * TODO
- * - Gérer erreurs, mauvaises URL, etc
- * - Ouverture/fermeture du player
- * - Reprise en cours de lecture
- * - mplayer en verbose -> fix ?
- */
-
 class YtPlayer {
 	constructor(screen, chat) {
 		this.screen = screen;
@@ -29,7 +20,12 @@ class YtPlayer {
 		let url = 'https://www.youtube.com/watch?v=' + yt_id;
 		exec("youtube-dl -f 'best[height=360]' -g '" + url + "'",
 			(err, stdout, stderr) => {
-				if(err) return;
+				if(err) {
+					this.chat.print('{red}Erreur d\'obtention de l\'url de la vidéo youtube {bold}' + yt_id +'{/bold}.{/red}');
+					this.chat.print(stderr);
+					return;
+				}
+
 				this.liste.push({
 					id: yt_id,
 					url: stdout.split('\n').shift(),
@@ -60,10 +56,6 @@ class YtPlayer {
 		this.screen.render();
 
 		this.to = setTimeout(() => this.playNext(), vid.video_length * 1000);
-	}
-
-	stop() {
-		clearTimeout(this.to);
 	}
 }
 
