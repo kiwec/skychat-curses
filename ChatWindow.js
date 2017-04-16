@@ -20,7 +20,7 @@ class ChatWindow {
 			parent: this.screen,
 			top: 0,
 			left: 0,
-			bottom: 1,
+			bottom: 2,
 			right: this.screen.width > 90 ? 20 : 0,
 			tags: true,
 			keys: true,
@@ -35,6 +35,16 @@ class ChatWindow {
 					inverse: true
 				}
 			}
+		});
+
+		this.separateur = blessed.line({
+			parent: this.screen,
+			bottom: 1,
+			height: 1,
+			left: 0,
+			right: 0,
+			orientation: 'horizontal',
+			type: 'line'
 		});
 
 		this.zoneTexte = blessed.textbox({
@@ -56,6 +66,7 @@ class ChatWindow {
 		this.zoneTexte.key('enter', () => {
 			this.skyChat.send(this.zoneTexte.value);
 			this.zoneTexte.clearValue();
+			this.zoneTexte.focus();
 			this.screen.render();
 		});
 
@@ -66,7 +77,7 @@ class ChatWindow {
 			left: this.screen.width - 19,
 			right: 0,
 			top: 0,
-			bottom: 1,
+			bottom: 2,
 			tags: true
 		});
 
