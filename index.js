@@ -36,11 +36,9 @@ function init_skychat(config) {
 
 		connexion.destroy();
 		let chat = new ChatWindow(screen, SkyChat);
+		SkyChat.on('connected_list', (list) => chat.updateUserList(list));
 		SkyChat.on('message', (msg) => chat.printMessage(msg));
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
-		SkyChat.on('room_name', (name) => {
-			chat.updateTitle(name);
-		});
-		SkyChat.on('connected_list', (list) => chat.updateUserList(list));
+		SkyChat.on('room_name', (name) => chat.updateTitle(name));
 	});
 }

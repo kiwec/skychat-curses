@@ -46,7 +46,10 @@ class ChatWindow {
 			left: 0,
 			right: 0,
 			style: {
-				bg: 'gray'
+				bg: 'gray',
+				hover: {
+					bg: 'lightgray'
+				}
 			}
 		});
 
@@ -57,10 +60,14 @@ class ChatWindow {
 		});
 
 		this.userList = blessed.list({
+			parent: this.screen,
 			items: [],
-			style: {
-				bg: 'yellow'
-			},
+			interactive: false,
+			left: this.screen.width - 19,
+			right: 0,
+			top: 0,
+			bottom: 1,
+			tags: true,
 			visible: this.screen.width > 90
 		});
 
@@ -68,6 +75,7 @@ class ChatWindow {
 
 		this.screen.on('resize', () => {
 			if(this.screen.width > 90) {
+				this.userList.left = this.screen.width - 19;
 				this.userList.show();
 				this.chat.right = 20;
 			} else {
@@ -99,9 +107,12 @@ class ChatWindow {
 	 * Met à jour la liste d'utilisateurs
 	 */
 	updateUserList(connected_list) {
-		this.screen.destroy();
-		console.log(connected_list);
-		// TODO
+		this.userList.clearItems();
+		for(let user of connected_list.list) {
+			this.userList.addItem('{' + user.color + '-fg}'
+				+ user.pseudo + '{/}');
+		}
+		this.screen.render();
 	}
 
 	/**
