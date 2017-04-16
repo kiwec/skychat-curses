@@ -1,7 +1,9 @@
 const blessed = require('blessed');
+const SkyChat = require('node-redsky');
+
 const ChatWindow = require('./ChatWindow');
 const FormConnexion = require('./FormConnexion');
-const SkyChat = require('node-redsky');
+const YtPlayer = require('./YtPlayer');
 
 // Initialisation du screen
 let screen = blessed.screen({
@@ -40,5 +42,6 @@ function init_skychat(config) {
 		SkyChat.on('message', (msg) => chat.printMessage(msg));
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 		SkyChat.on('room_name', (name) => chat.updateTitle(name));
+		new YtPlayer(screen, chat).playYt('https://www.youtube.com/watch?v=dv13gl0a-FA');
 	});
 }
