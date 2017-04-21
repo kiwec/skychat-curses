@@ -8,7 +8,7 @@ const YtPlayer = require('./YtPlayer');
 // Initialisation du screen
 let screen = blessed.screen({
 	autoPadding: true,
-	fastCSR: true,
+	smartCSR: true,
 	fullUnicode: true,
 	title: 'redsky-curses'
 });
