@@ -112,6 +112,12 @@ class ChatWindow {
 		});
 	}
 
+	clean(txt) {
+		txt = this.skyChat.messageHandler.clean(txt);
+		txt = blessed.escape(txt);
+		return txt;
+	}
+
 	/**
 	 * Ajoute le texte à la liste de messages
 	 */
@@ -124,9 +130,21 @@ class ChatWindow {
 	 * Ajoute un message à la liste de messages
 	 */
 	printMessage(msg) {
-		let txt = this.skyChat.messageHandler.clean(msg.message);
-		this.print('{' + msg.color + '-fg}' + msg.pseudo + '{/}: '
-			+ blessed.escape(txt));
+		let citation = msg.message.match(/<bl.*?>(.*?)<\/b.*?e>/);
+		if(citation) {
+			let user_cite = citation[0].match(/.*?>Par <b>(.*?)<\/b>/);
+			citation = this.clean(citation[0].replace(/.*?r>/, ''));
+			msg.message = '-> ' + this.clean(msg.message.replace(/.*ote>/, ''));
+
+			let txt = `{${msg.color}-fg}${msg.pseudo}{/}:`;
+			txt += ` « ${citation} »`;
+			txt += ` - {ul}${user_cite[1]}{/ul}`;
+			this.print(txt);
+			if(msg.message !== '-> ') this.printMessage(msg);
+		} else {
+			let txt = this.clean(msg.message);
+			this.print(`{${msg.color}-fg}${msg.pseudo}{/}: ${txt}`);
+		}
 	}
 
 	/**
