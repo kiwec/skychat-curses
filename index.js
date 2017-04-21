@@ -8,7 +8,7 @@ const YtPlayer = require('./YtPlayer');
 // Initialisation du screen
 let screen = blessed.screen({
 	autoPadding: true,
-	smartCSR: true,
+	fastCSR: true,
 	fullUnicode: true,
 	title: 'skychat-curses'
 });
