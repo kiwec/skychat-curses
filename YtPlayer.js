@@ -8,21 +8,23 @@ class YtPlayer {
 		this.liste = [];
 		this.to = -1;
 	}
-	
-	addYt(yt_id, yt_length) {
-		for(let vid of this.liste) {
-			// Vidéo déjà dans la liste
-			if(vid.yt_id == yt_id) {
-				return;
-			}
-		}
 
+	/**
+	 * Ajoute une vidéo youtube à la playlist
+	 *
+	 * @args yt_id ID de la vidéo youtube
+	 * @args yt_length Longueur en secondes de la vidéo
+	 */
+	addYt(yt_id, yt_length) {
+		if(this.isInPlaylist(yt_id)) return;
+
+		// Obtention de l'URL directe
 		let url = 'https://www.youtube.com/watch?v=' + yt_id;
 		exec("youtube-dl -f 'best[height=360]' -g '" + url + "'",
 			(err, stdout, stderr) => {
 				if(err) {
-					this.chat.print('{red}Erreur d\'obtention de l\'url de la vidéo youtube {bold}' + yt_id +'{/bold}.{/red}');
-					this.chat.print(stderr);
+					this.chat.print('{red-fg}Erreur de lecture pour {bold}'
+							+ yt_id + '{/bold} : ' + stderr);
 					return;
 				}
 
@@ -38,12 +40,33 @@ class YtPlayer {
 		});
 	}
 
-	playNext() {
-		clearTimeout(this.to);
-		if(typeof this.video !== 'undefined') this.video.destroy();
-		if(this.liste.length == 0) return;
+	/**
+	 * Renvoie true si la vidéo en argument est dans la playlist
+	 *
+	 * @args yt_id ID de la vidéo youtube
+	 */
+	isInPlaylist(yt_id) {
+		for(let vid of this.liste)
+			if(vid.id == yt_id)
+				return true;
+		return false;
+	}
 
-		let vid = this.liste.shift();
+	/**
+	 * Renvoie true si la vidéo en argument est en cours lecture
+	 *
+	 * @args yt_id ID de la vidéo youtube
+	 */
+	isPlaying(yt_id) {
+		if(this.liste.length == 0) return false;
+		return this.liste[0].id == yt_id;
+	}
+
+	/**
+	 * Coupe la vidéo en cours et démarre la suivante
+	 */
+	playNext() {
+		if(this.liste.length == 0) return;
 
 		this.video = blessed.video({
 			parent: this.screen,
@@ -51,12 +74,28 @@ class YtPlayer {
 			left: 0,
 			width: this.chat.getWidth() - 1,
 			height: '50%',
-			file: vid.url
+			file: this.liste[0].url
 		});
 
 		this.screen.render();
 
-		this.to = setTimeout(() => this.playNext(), vid.video_length * 1000);
+		this.to = setTimeout(() => {
+			this.stop();
+			this.playNext();
+		}, this.liste[0].video_length * 1000);
+	}
+
+	/**
+	 * Arrête la lecture
+	 */
+	stop() {
+		clearTimeout(this.to);
+		this.liste.shift();
+
+		if(typeof this.video !== 'undefined') {
+			this.video.destroy();
+			this.screen.render();
+		}
 	}
 }
 
