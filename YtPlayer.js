@@ -82,7 +82,7 @@ class YtPlayer {
 		this.to = setTimeout(() => {
 			this.stop();
 			this.playNext();
-		}, this.liste[0].video_length * 1000);
+		}, this.liste[0].video_length * 1000 + 5000);
 	}
 
 	/**

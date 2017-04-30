@@ -44,6 +44,10 @@ function init_skychat(config) {
 		SkyChat.on('room_name', (name) => chat.updateTitle(name));
 
 		let player = new YtPlayer(screen, chat);
+		SkyChat.on('curses_skip', () => {
+			player.stop();
+			player.playNext();
+		});
 		SkyChat.on('yt_sync', (data) => {
 			if(typeof data.id !== 'undefined') {
 				player.addYt(data.id, data.duration);
