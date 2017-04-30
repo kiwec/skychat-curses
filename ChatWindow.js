@@ -64,6 +64,14 @@ class ChatWindow {
 		});
 
 		this.zoneTexte.key('enter', () => {
+			if(this.zoneTexte.value == '/skip') {
+				this.skyChat.fire('curses_skip');
+				this.zoneTexte.clearValue();
+				this.zoneTexte.focus();
+				this.screen.render();
+				return;
+			}
+
 			this.skyChat.send(this.zoneTexte.value);
 			this.skyChat.sock.emit('mouse_position', {
 				x: Math.random(),
