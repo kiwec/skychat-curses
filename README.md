@@ -12,8 +12,7 @@ Client en ligne de commande pour le chat skychat.fr.
 ### Installation
 
 ```sh
-$ npm install kiwec/skychat-curses
-$ mv node_modules/skychat-curses .
-$ node index.js
+$ npm install -g skychat-curses
+$ skychat-curses
 ```
 
