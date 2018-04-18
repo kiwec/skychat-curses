@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const blessed = require('blessed');
 const SkyChat = require('node-redsky');
 
