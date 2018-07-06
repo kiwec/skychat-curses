@@ -1,5 +1,5 @@
 const blessed = require('blessed');
-const fs = require('fs');
+let config = require('./Config');
 
 /**
  * Formulaire de connexion
@@ -37,13 +37,11 @@ class FormConnexion {
 		this.form.on('submit', (data) => {
 			this._showLoading();
 			this.screen.render();
-			fs.writeFile('config.json', 
-					JSON.stringify({
-					user: data.username,
-					pass: data.password
-				}), (err) => {
-					if(err) throw err;
-			});
+
+			config.username = data.username;
+			config.password = data.password;
+			config.save();
+
 			this.callback(data);
 		});
 	}
@@ -52,14 +50,9 @@ class FormConnexion {
 	 * Initialise les champs de texte
 	 */
 	_initFields() {
-		let userval = '';
-		let passval = '';
-
-		if(fs.existsSync('config.json')) {
-			let json = JSON.parse(fs.readFileSync('config.json'));
-			userval = json.user || '';
-			passval = json.pass || '';
-		}
+		config.load();
+		let userval = config.username;
+		let passval = config.password;
 
 		this.username = blessed.textbox({
 			parent: this.form,
