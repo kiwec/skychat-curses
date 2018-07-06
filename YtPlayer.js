@@ -1,5 +1,6 @@
 const blessed = require('blessed');
 const exec = require('child_process').exec;
+let config = require('./Config');
 
 class YtPlayer {
 	constructor(screen, chat) {
@@ -67,6 +68,7 @@ class YtPlayer {
 	 */
 	playNext() {
 		if(this.liste.length == 0) return;
+		if(config.player != 'enabled') return;
 
 		this.video = blessed.video({
 			parent: this.screen,

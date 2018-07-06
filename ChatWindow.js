@@ -1,4 +1,5 @@
 const blessed = require('blessed');
+let config = require('./Config');
 
 /**
  * Fenêtre de chat
@@ -66,6 +67,24 @@ class ChatWindow {
 		this.zoneTexte.key('enter', () => {
 			if(this.zoneTexte.value == '/skip') {
 				this.skyChat.fire('curses_skip');
+				this.zoneTexte.clearValue();
+				this.zoneTexte.focus();
+				this.screen.render();
+				return;
+			}
+
+			if(this.zoneTexte.value.indexOf('/player ') == 0) {
+				if(this.zoneTexte.value == '/player off') {
+					config.player = 'disabled';
+					config.save();
+					this.print('Player desactive.');
+					this.skyChat.fire('curses_skip');
+				} else if(this.zoneTexte.value == '/player on') {
+					config.player = 'enabled';
+					config.save();
+					this.print('Player active.');
+				}
+
 				this.zoneTexte.clearValue();
 				this.zoneTexte.focus();
 				this.screen.render();
