@@ -48,15 +48,9 @@ function init_skychat(config) {
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 		SkyChat.on('room_name', (name) => chat.updateTitle(name));
 
-		let player = new YtPlayer(screen, chat);
-		SkyChat.on('curses_skip', () => {
-			player.stop();
-			player.playNext();
-		});
-		SkyChat.on('yt_sync', (data) => {
-			if(typeof data.id !== 'undefined') {
-				player.addYt(data.id, data.duration);
-			}
-		});
+		let player = new YtPlayer(screen, chat, SkyChat.player);
+		SkyChat.on('curses_skip', () => player.stop());
+		SkyChat.on('player_next', () => player.next());
+		setInterval(() => player.update(), 1000);
 	});
 }

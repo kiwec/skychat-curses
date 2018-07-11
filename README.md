@@ -4,9 +4,7 @@ Client en ligne de commande pour le chat redsky.fr.
 
 ### Dépendances
 
-* libcaca
-* mplayer ou mpv
-* nodejs
+* vlc
 * youtube-dl
 
 ### Installation
@@ -15,4 +13,3 @@ Client en ligne de commande pour le chat redsky.fr.
 $ npm install -g redsky-curses
 $ redsky-curses
 ```
-
