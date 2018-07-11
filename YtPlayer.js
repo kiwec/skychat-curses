@@ -1,103 +1,89 @@
 const blessed = require('blessed');
-const exec = require('child_process').exec;
+const { spawn } = require('child_process');
 let config = require('./Config');
 
 class YtPlayer {
-	constructor(screen, chat) {
-		this.screen = screen;
+	constructor(screen, chat, player) {
 		this.chat = chat;
-		this.liste = [];
-		this.to = -1;
-	}
+		this.player = player;
+		this.screen = screen;
+		this.mpv = null;
 
-	/**
-	 * Ajoute une vidéo youtube à la playlist
-	 *
-	 * @args yt_id ID de la vidéo youtube
-	 * @args yt_length Longueur en secondes de la vidéo
-	 */
-	addYt(yt_id, yt_length) {
-		if(this.isInPlaylist(yt_id)) return;
-
-		// Obtention de l'URL directe
-		let url = 'https://www.youtube.com/watch?v=' + yt_id;
-		exec("youtube-dl -f 'best[height=360]' -g '" + url + "'",
-			(err, stdout, stderr) => {
-				if(err) {
-					this.chat.print('{red-fg}Erreur de lecture pour {bold}'
-							+ yt_id + '{/bold} : ' + stderr);
-					return;
-				}
-
-				this.liste.push({
-					id: yt_id,
-					url: stdout.split('\n').shift(),
-					video_length: yt_length
-				});
-
-				if(this.liste.length == 1) {
-					this.playNext();
-				}
-		});
-	}
-
-	/**
-	 * Renvoie true si la vidéo en argument est dans la playlist
-	 *
-	 * @args yt_id ID de la vidéo youtube
-	 */
-	isInPlaylist(yt_id) {
-		for(let vid of this.liste)
-			if(vid.id == yt_id)
-				return true;
-		return false;
-	}
-
-	/**
-	 * Renvoie true si la vidéo en argument est en cours lecture
-	 *
-	 * @args yt_id ID de la vidéo youtube
-	 */
-	isPlaying(yt_id) {
-		if(this.liste.length == 0) return false;
-		return this.liste[0].id == yt_id;
-	}
-
-	/**
-	 * Coupe la vidéo en cours et démarre la suivante
-	 */
-	playNext() {
-		if(this.liste.length == 0) return;
-		if(config.player != 'enabled') return;
-
-		this.video = blessed.video({
+		this.playing = blessed.text({
 			parent: this.screen,
 			top: 0,
 			left: 0,
 			width: this.chat.getWidth() - 1,
-			height: '50%',
-			file: this.liste[0].url
+			height: 1,
+			orientation: 'horizontal'
 		});
 
-		this.screen.render();
+		this.progressbar = blessed.progressbar({
+			parent: this.playing,
+			top: 0,
+			left: 0,
+			width: this.chat.getWidth() - 1,
+			height: 1,
+			pch: '.',
+			orientation: 'horizontal',
+			keys: false,
+			mouse: false
+		});
 
-		this.to = setTimeout(() => {
-			this.stop();
-			this.playNext();
-		}, this.liste[0].video_length * 1000 + 5000);
+		this.line = blessed.line({
+			parent: this.screen,
+			top: 1,
+			left: 0,
+			width: this.chat.getWidth() - 1,
+			height: 1,
+			orientation: 'horizontal',
+			keys: false,
+			mouse: false
+		});
+	}
+
+	next() {
+		this.stop();
+
+		if(this.player.id) {
+			let url = 'https://youtu.be/' + this.player.id;
+			let params = ['--no-video', url, '--start-time=' + this.player.position];
+			this.mpv = spawn('cvlc', params);
+			this.mpv.on('error', err => {
+				this.chat.print('{red-fg}Erreur de lecture : ' + err);
+			});
+
+			let width = ('Now playing : ' + this.player.title).length;
+			this.progressbar.left = width + 1;
+			this.progressbar.width = this.chat.getWidth() - width - 2;
+			this.progressbar.show();
+			this.playing.setText('Now playing : ' + this.player.title);
+			this.playing.show();
+			this.line.show();
+			this.update();
+		}
 	}
 
 	/**
 	 * Arrête la lecture
 	 */
 	stop() {
-		clearTimeout(this.to);
-		this.liste.shift();
-
-		if(typeof this.video !== 'undefined') {
-			this.video.destroy();
-			this.screen.render();
+		if(this.mpv) {
+			this.mpv.kill('SIGTERM');
+			this.mpv = null;
 		}
+
+		this.progressbar.reset();
+		this.progressbar.hide();
+		this.playing.hide();
+		this.line.hide();
+		this.screen.render();
+	}
+
+	update() {
+		this.progressbar.setProgress(this.player.position / this.player.duration * 100);
+		this.player.position++;
+		this.screen.render();
 	}
 }
 
