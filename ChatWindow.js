@@ -170,7 +170,11 @@ class ChatWindow {
 			if(msg.message !== '-> ') this.printMessage(msg);
 		} else {
 			let txt = this.clean(msg.message);
-			this.print(`{${msg.color}-fg}${msg.pseudo}{/}: ${txt}`);
+			let fmt_txt = `{${msg.color}-fg}${msg.pseudo}{/}: ${txt}`;
+			if(msg.message_type == 'user_mp') {
+				fmt_txt = '{green-fg}[MP] ' + fmt_txt;
+			}
+			this.print(fmt_txt);
 		}
 	}
 

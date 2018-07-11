@@ -23,6 +23,8 @@ screen.key(['escape', 'q', 'C-c'], (ch, key) => {
 let connexion = new FormConnexion(screen, init_skychat);
 screen.render();
 
+var logged = false;
+
 // Events du skychat
 function init_skychat(config) {
 	SkyChat.init({
@@ -31,6 +33,8 @@ function init_skychat(config) {
 	});
 	
 	SkyChat.on('log_once', (log) => {
+		if(logged) return;
+		logged = true;
 		if(log.error) {
 			screen.destroy();
 			console.log('Erreur de connection : ' + log.error);
