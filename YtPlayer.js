@@ -53,11 +53,11 @@ class YtPlayer {
 				this.chat.print('{red-fg}Erreur de lecture : ' + err);
 			});
 
-			let width = ('Now playing : ' + this.player.title).length;
+			let width = ('♫ ' + this.player.title).length;
 			this.progressbar.left = width + 1;
 			this.progressbar.width = this.chat.getWidth() - width - 2;
 			this.progressbar.show();
-			this.playing.setText('Now playing : ' + this.player.title);
+			this.playing.setText('♫ ' + this.player.title);
 			this.playing.show();
 			this.line.show();
 			this.update();
@@ -88,4 +88,3 @@ class YtPlayer {
 }
 
 module.exports = YtPlayer;
-
