@@ -47,7 +47,6 @@ function init_skychat(config) {
 		connexion.destroy();
 		chat = new ChatWindow(screen, SkyChat);
 		SkyChat.on('connected_list', (list) => chat.updateUserList(list));
-		SkyChat.on('message', (msg) => chat.printMessage(msg));
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 		SkyChat.on('room_name', (name) => chat.updateTitle(name));
 		SkyChat.on('user_join', user => {

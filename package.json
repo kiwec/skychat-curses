@@ -1,6 +1,6 @@
 {
   "name": "redsky-curses",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Interface curses pour chat redsky",
   "keywords": [
     "curses",
