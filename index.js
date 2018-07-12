@@ -14,8 +14,11 @@ let screen = blessed.screen({
 	title: 'skychat-curses'
 });
 
+let chat, player;
+
 // Touches de sortie
 screen.key(['escape', 'q', 'C-c'], (ch, key) => {
+	player.stop();
 	return process.exit(0);
 });
 
@@ -42,13 +45,13 @@ function init_skychat(config) {
 		}
 
 		connexion.destroy();
-		let chat = new ChatWindow(screen, SkyChat);
+		chat = new ChatWindow(screen, SkyChat);
 		SkyChat.on('connected_list', (list) => chat.updateUserList(list));
 		SkyChat.on('message', (msg) => chat.printMessage(msg));
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 		SkyChat.on('room_name', (name) => chat.updateTitle(name));
 
-		let player = new YtPlayer(screen, chat, SkyChat.player);
+		player = new YtPlayer(screen, chat, SkyChat.player);
 		SkyChat.on('curses_skip', () => player.stop());
 		SkyChat.on('player_next', () => player.next());
 		setInterval(() => player.update(), 1000);
