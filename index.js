@@ -50,6 +50,14 @@ function init_skychat(config) {
 		SkyChat.on('message', (msg) => chat.printMessage(msg));
 		SkyChat.on('newmessage', (msg) => chat.printMessage(msg));
 		SkyChat.on('room_name', (name) => chat.updateTitle(name));
+		SkyChat.on('user_join', user => {
+			chat.print(`{${user.color}-fg}${user.pseudo} a rejoint la room.`);
+			screen.render();
+		});
+		SkyChat.on('user_leave', user => {
+			chat.print(`{${user.color}-fg}${user.pseudo} a quitté la room.`);
+			screen.render();
+		});
 
 		player = new YtPlayer(screen, chat, SkyChat.player);
 		SkyChat.on('curses_skip', () => player.stop());
