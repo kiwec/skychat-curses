@@ -1,6 +1,6 @@
 const blessed = require('blessed');
 const { spawn } = require('child_process');
-let config = require('./Config');
+const config = require('./Config');
 
 class YtPlayer {
 	constructor(screen, chat, player) {
@@ -45,7 +45,7 @@ class YtPlayer {
 	next() {
 		this.stop();
 
-		if(this.player.id) {
+		if(this.player.id && config.player == 'enabled') {
 			let url = 'https://youtu.be/' + this.player.id;
 			let params = ['--no-video', url, '--start-time=' + this.player.position];
 			this.mpv = spawn('cvlc', params);
