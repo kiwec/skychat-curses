@@ -1,6 +1,6 @@
 {
   "name": "skychat-curses",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "Interface curses pour chat skychat",
   "keywords": [
     "curses",
@@ -11,9 +11,11 @@
   "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
-    "node-skychat": "^1.2.3",
-    "pty.js": "^0.3.1",
-    "term.js": "0.0.7"
+    "node-skychat": "^1.2.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiwec/skychat-curses.git"
   },
   "preferGlobal": true,
   "bin": {
