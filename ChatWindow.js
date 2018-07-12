@@ -184,13 +184,16 @@ class ChatWindow {
 	updateUserList(connected_list) {
 		this.userList.clearItems();
 		
-		let users = connected_list.list.sort((a, b) => {
+		let users = connected_list.sort((a, b) => {
 			return a.last_activity - b.last_activity;
 		});
 
 		for(let user of users) {
-			this.userList.addItem('{' + user.color + '-fg}'
-				+ user.pseudo + '{/}');
+			let str = `{${user.color}-fg}${user.pseudo}{/}`;
+			if(user.typing) {
+				str = '*' + str;
+			}
+			this.userList.addItem(str);
 		}
 		this.screen.render();
 	}
