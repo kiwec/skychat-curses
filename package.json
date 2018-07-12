@@ -1,6 +1,6 @@
 {
   "name": "skychat-curses",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Interface curses pour chat skychat",
   "keywords": [
     "curses",

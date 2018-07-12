@@ -1,5 +1,5 @@
 const blessed = require('blessed');
-let config = require('./Config');
+const config = require('./Config');
 
 /**
  * Fenêtre de chat
