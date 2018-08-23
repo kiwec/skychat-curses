@@ -62,5 +62,7 @@ function init_skychat(config) {
 		SkyChat.on('curses_skip', () => player.stop());
 		SkyChat.on('player_next', () => player.next());
 		setInterval(() => player.update(), 1000);
+
+		SkyChat.send('/gethistory');
 	});
 }
