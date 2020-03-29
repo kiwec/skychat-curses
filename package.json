@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
-    "node-skychat": "^1.2.8"
+    "node-skychat": "github:kiwec/node-skychat"
   },
   "repository": {
     "type": "git",

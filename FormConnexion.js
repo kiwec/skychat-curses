@@ -1,5 +1,5 @@
-const blessed = require('blessed');
-let config = require('./Config');
+const blessed = require("blessed");
+let config = require("./Config");
 
 /**
  * Formulaire de connexion
@@ -24,17 +24,17 @@ class FormConnexion {
 	_initForm() {
 		this.form = blessed.form({
 			parent: this.screen,
-			border: 'line',
+			border: "line",
 			mouse: true,
 			keys: true,
-			left: 'center',
-			top: 'center',
+			left: "center",
+			top: "center",
 			width: 50,
 			height: 9,
-			label: ' Connexion ',
+			label: " Connexion "
 		});
 
-		this.form.on('submit', (data) => {
+		this.form.on("submit", data => {
 			this._showLoading();
 			this.screen.render();
 
@@ -62,12 +62,12 @@ class FormConnexion {
 			width: 20,
 			left: 20,
 			top: 1,
-			name: 'username',
+			name: "username",
 			value: userval,
 			style: {
-				bg: 'gray',
+				bg: "gray",
 				hover: {
-					bg: 'lightgray'
+					bg: "lightgray"
 				}
 			}
 		});
@@ -76,7 +76,7 @@ class FormConnexion {
 			parent: this.form,
 			top: 1,
 			left: 11,
-			content: 'Pseudo : '
+			content: "Pseudo : "
 		});
 
 		this.password = blessed.textbox({
@@ -88,12 +88,12 @@ class FormConnexion {
 			left: 20,
 			top: 3,
 			censor: true,
-			name: 'password',
+			name: "password",
 			value: passval,
 			style: {
-				bg: 'gray',
+				bg: "gray",
 				hover: {
-					bg: 'lightgray'
+					bg: "lightgray"
 				}
 			}
 		});
@@ -102,11 +102,11 @@ class FormConnexion {
 			parent: this.form,
 			top: 3,
 			left: 5,
-			content: 'Mot de passe : '
+			content: "Mot de passe : "
 		});
 
-		this.username.key('enter', () => this.form.submit());
-		this.password.key('enter', () => this.form.submit());
+		this.username.key("enter", () => this.form.submit());
+		this.password.key("enter", () => this.form.submit());
 	}
 
 	/**
@@ -121,22 +121,22 @@ class FormConnexion {
 				left: 1,
 				right: 1
 			},
-			left: 'center',
+			left: "center",
 			top: 5,
-			name: 'btnsubmit',
-			content: 'Se connecter',
+			name: "btnsubmit",
+			content: "Se connecter",
 			style: {
-				bg: 'gray',
+				bg: "gray",
 				focus: {
-					bg: 'lightgray'
+					bg: "lightgray"
 				},
 				hover: {
-					bg: 'lightgray'
+					bg: "lightgray"
 				}
 			}
 		});
 
-		this.btnConnexion.on('press', () => {
+		this.btnConnexion.on("press", () => {
 			this.form.submit();
 		});
 	}
@@ -153,13 +153,13 @@ class FormConnexion {
 
 		this.txtConnexion = blessed.loading({
 			parent: this.form,
-			height: 'shrink',
+			height: "shrink",
 			width: 1,
-			top: 'center',
-			left: 'center'
+			top: "center",
+			left: "center"
 		});
 
-		this.txtConnexion.load('');
+		this.txtConnexion.load("");
 	}
 
 	/**
@@ -171,6 +171,6 @@ class FormConnexion {
 		this.form.destroy();
 		this.screen.render();
 	}
-};
+}
 
 module.exports = FormConnexion;

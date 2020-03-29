@@ -1,11 +1,11 @@
 # skychat-curses
 
-Client en ligne de commande pour le chat skychat.fr.
+Client en ligne de commande pour le skychat.
 
 ### Dépendances
 
-* vlc
-* youtube-dl
+-   vlc
+-   youtube-dl
 
 ### Installation
 

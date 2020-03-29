@@ -1,6 +1,6 @@
-const blessed = require('blessed');
-const { spawn } = require('child_process');
-const config = require('./Config');
+const blessed = require("blessed");
+const { spawn } = require("child_process");
+const config = require("./Config");
 
 class YtPlayer {
 	constructor(screen, chat, player) {
@@ -15,7 +15,7 @@ class YtPlayer {
 			left: 0,
 			width: this.chat.getWidth() - 1,
 			height: 1,
-			orientation: 'horizontal'
+			orientation: "horizontal"
 		});
 
 		this.progressbar = blessed.progressbar({
@@ -24,8 +24,8 @@ class YtPlayer {
 			left: 0,
 			width: this.chat.getWidth() - 1,
 			height: 1,
-			pch: '.',
-			orientation: 'horizontal',
+			pch: ".",
+			orientation: "horizontal",
 			keys: false,
 			mouse: false
 		});
@@ -36,7 +36,7 @@ class YtPlayer {
 			left: 0,
 			width: this.chat.getWidth() - 1,
 			height: 1,
-			orientation: 'horizontal',
+			orientation: "horizontal",
 			keys: false,
 			mouse: false
 		});
@@ -45,19 +45,23 @@ class YtPlayer {
 	next() {
 		this.stop();
 
-		if(this.player.id && config.player == 'enabled') {
-			let url = 'https://youtu.be/' + this.player.id;
-			let params = ['--no-video', url, '--start-time=' + this.player.position];
-			this.mpv = spawn('cvlc', params);
-			this.mpv.on('error', err => {
-				this.chat.print('{red-fg}Erreur de lecture : ' + err);
+		if (this.player.id && config.player == "enabled") {
+			let url = "https://youtu.be/" + this.player.id;
+			let params = [
+				"--no-video",
+				url,
+				"--start-time=" + this.player.position
+			];
+			this.mpv = spawn("cvlc", params);
+			this.mpv.on("error", err => {
+				this.chat.print("{red-fg}Erreur de lecture : " + err);
 			});
 
-			let width = ('♫ ' + this.player.title).length;
+			let width = ("♫ " + this.player.title).length;
 			this.progressbar.left = width + 1;
 			this.progressbar.width = this.chat.getWidth() - width - 2;
 			this.progressbar.show();
-			this.playing.setText('♫ ' + this.player.title);
+			this.playing.setText("♫ " + this.player.title);
 			this.playing.show();
 			this.line.show();
 			this.update();
@@ -68,8 +72,8 @@ class YtPlayer {
 	 * Arrête la lecture
 	 */
 	stop() {
-		if(this.mpv) {
-			this.mpv.kill('SIGTERM');
+		if (this.mpv) {
+			this.mpv.kill("SIGTERM");
 			this.mpv = null;
 		}
 
@@ -81,7 +85,9 @@ class YtPlayer {
 	}
 
 	update() {
-		this.progressbar.setProgress(this.player.position / this.player.duration * 100);
+		this.progressbar.setProgress(
+			(this.player.position / this.player.duration) * 100
+		);
 		this.player.position++;
 		this.screen.render();
 	}

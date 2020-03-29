@@ -1,5 +1,5 @@
-const blessed = require('blessed');
-const config = require('./Config');
+const blessed = require("blessed");
+const config = require("./Config");
 
 /**
  * Fenêtre de chat
@@ -28,9 +28,9 @@ class ChatWindow {
 			mouse: true,
 			scrollback: 256,
 			scrollbar: {
-				ch: ' ',
+				ch: " ",
 				track: {
-					bg: 'gray'
+					bg: "gray"
 				},
 				style: {
 					inverse: true
@@ -44,8 +44,8 @@ class ChatWindow {
 			height: 1,
 			left: 0,
 			right: 0,
-			orientation: 'horizontal',
-			type: 'line'
+			orientation: "horizontal",
+			type: "line"
 		});
 
 		this.zoneTexte = blessed.textbox({
@@ -57,32 +57,32 @@ class ChatWindow {
 			left: 0,
 			right: 0,
 			style: {
-				bg: 'gray',
+				bg: "gray",
 				hover: {
-					bg: 'lightgray'
+					bg: "lightgray"
 				}
 			}
 		});
 
-		this.zoneTexte.key('enter', () => {
-			if(this.zoneTexte.value == '/skip') {
-				this.skyChat.fire('curses_skip');
+		this.zoneTexte.key("enter", () => {
+			if (this.zoneTexte.value == "/skip") {
+				this.skyChat.fire("curses_skip");
 				this.zoneTexte.clearValue();
 				this.zoneTexte.focus();
 				this.screen.render();
 				return;
 			}
 
-			if(this.zoneTexte.value.indexOf('/player ') == 0) {
-				if(this.zoneTexte.value == '/player off') {
-					config.player = 'disabled';
+			if (this.zoneTexte.value.indexOf("/player ") == 0) {
+				if (this.zoneTexte.value == "/player off") {
+					config.player = "disabled";
 					config.save();
-					this.print('Player desactive.');
-					this.skyChat.fire('curses_skip');
-				} else if(this.zoneTexte.value == '/player on') {
-					config.player = 'enabled';
+					this.print("Player desactive.");
+					this.skyChat.fire("curses_skip");
+				} else if (this.zoneTexte.value == "/player on") {
+					config.player = "enabled";
 					config.save();
-					this.print('Player active.');
+					this.print("Player active.");
 				}
 
 				this.zoneTexte.clearValue();
@@ -92,17 +92,14 @@ class ChatWindow {
 			}
 
 			this.skyChat.send(this.zoneTexte.value);
-			this.skyChat.sock.emit('mouse_position', {
+			this.skyChat.sock.emit("mouse_position", {
 				x: Math.random(),
 				y: Math.random()
 			});
-			this.skyChat.sock.emit('typing', { currently_typing: true });
+			this.skyChat.sock.emit("typing", { currently_typing: true });
 			setTimeout(() => {
-				this.skyChat.sock.emit(
-					'typing',
-					{ currently_typing: false }
-				);
-			}, 200)
+				this.skyChat.sock.emit("typing", { currently_typing: false });
+			}, 200);
 			this.zoneTexte.clearValue();
 			this.zoneTexte.focus();
 			this.screen.render();
@@ -119,15 +116,15 @@ class ChatWindow {
 			tags: true
 		});
 
-		if(this.screen.width <= 90) {
+		if (this.screen.width <= 90) {
 			this.userList.hide();
 		}
 
 		this.zoneTexte.focus();
 		this.screen.render();
 
-		this.screen.on('resize', () => {
-			if(this.screen.width > 90) {
+		this.screen.on("resize", () => {
+			if (this.screen.width > 90) {
 				this.userList.left = this.screen.width - 19;
 				this.userList.show();
 				this.chat.right = 20;
@@ -158,21 +155,21 @@ class ChatWindow {
 	 */
 	printMessage(msg) {
 		let citation = msg.message.match(/<bl.*?>(.*?)<\/b.*?e>/);
-		if(citation) {
+		if (citation) {
 			let user_cite = citation[0].match(/.*?>Par <b>(.*?)<\/b>/);
-			citation = this.clean(citation[0].replace(/.*?r>/, ''));
-			msg.message = '-> ' + this.clean(msg.message.replace(/.*ote>/, ''));
+			citation = this.clean(citation[0].replace(/.*?r>/, ""));
+			msg.message = "-> " + this.clean(msg.message.replace(/.*ote>/, ""));
 
 			let txt = `{${msg.color}-fg}${msg.pseudo}{/}:`;
 			txt += ` « ${citation} »`;
 			txt += ` - {ul}${user_cite[1]}{/ul}`;
 			this.print(txt);
-			if(msg.message !== '-> ') this.printMessage(msg);
+			if (msg.message !== "-> ") this.printMessage(msg);
 		} else {
 			let txt = this.clean(msg.message);
 			let fmt_txt = `{${msg.color}-fg}${msg.pseudo}{/}: ${txt}`;
-			if(msg.message_type == 'user_mp') {
-				fmt_txt = '{green-fg}[MP] ' + fmt_txt;
+			if (msg.message_type == "user_mp") {
+				fmt_txt = "{green-fg}[MP] " + fmt_txt;
 			}
 			this.print(fmt_txt);
 		}
@@ -183,15 +180,15 @@ class ChatWindow {
 	 */
 	updateUserList(connected_list) {
 		this.userList.clearItems();
-		
+
 		let users = connected_list.sort((a, b) => {
 			return a.last_activity - b.last_activity;
 		});
 
-		for(let user of users) {
+		for (let user of users) {
 			let str = `{${user.color}-fg}${user.pseudo}{/}`;
-			if(user.typing) {
-				str = '*' + str;
+			if (user.typing) {
+				str = "*" + str;
 			}
 			this.userList.addItem(str);
 		}
@@ -205,8 +202,9 @@ class ChatWindow {
 		this.screen.title = newTitle;
 	}
 
-	getWidth() { return this.chat.width; }
+	getWidth() {
+		return this.chat.width;
+	}
 }
 
 module.exports = ChatWindow;
-
